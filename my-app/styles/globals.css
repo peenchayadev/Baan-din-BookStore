@@ -1,3 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .textA {
+    font-family: 'Quicksand';
+  }
+
+  .texttitleAbout {
+    font-family: 'Quicksand';
+    font-weight: 400;
+    font-size: 20px;
+  }
+
+  .textNameAbout {
+    font-family: 'Quicksand';
+    font-weight: 600;
+    font-size: 35px;
+  }
+
+  .textbuttonHome {
+    font-family: 'Quicksand';
+    font-weight: 500;
+  }
+
+  .textbuttonL {
+    font-family: 'Quicksand';
+    font-weight: 700;
+    font-size: 24px;
+  }
+  .displayL {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 72px;
+  }
+
+  .displayM {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 60px;
+  }
+
+  .displayS {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 52px;
+  }
+
+  .headlineL {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 48px;
+  }
+
+  .headlineM {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 44px;
+  }
+
+  .headlineS {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 40px;
+  }
+
+  .titleL {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  .titleM {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .titleS {
+    font-family: 'Sarabun';
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .labelL {
+    font-family: 'Sarabun';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .labelM {
+    font-family: 'Sarabun';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .labelS {
+    font-family: 'Sarabun';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .bodyL {
+    font-family: 'Sarabun';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .bodyM {
+    font-family: 'Sarabun';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .bodyS {
+    font-family: 'Sarabun';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
+}
