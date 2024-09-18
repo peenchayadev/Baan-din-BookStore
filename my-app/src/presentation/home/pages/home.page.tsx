@@ -6,13 +6,13 @@ export const HomePage = () => {
   //   CONST
   //---------------------
   const Books = [
-    { title: "Harry Potter and the Philosopher's Stone" },
-    { title: 'Harry Potter and the Chamber of Secrets' },
-    { title: 'Harry Potter and the Prisoner of Azkaban' },
-    { title: 'Harry Potter and the Goblet of Fire' },
-    { title: 'Harry Potter and the Order of the Phoenix' },
-    { title: 'Harry Potter and the Half-Blood Prince' },
-    { title: 'Harry Potter and the Deathly Hallows' },
+    { id: 1, title: "Harry Potter and the Philosopher's Stone", price: 100 },
+    { id: 2, title: 'Harry Potter and the Chamber of Secrets', price: 100 },
+    { id: 3, title: 'Harry Potter and the Prisoner of Azkaban', price: 100 },
+    { id: 4, title: 'Harry Potter and the Goblet of Fire', price: 100 },
+    { id: 5, title: 'Harry Potter and the Order of the Phoenix', price: 100 },
+    { id: 6, title: 'Harry Potter and the Half-Blood Prince', price: 100 },
+    { id: 7, title: 'Harry Potter and the Deathly Hallows', price: 100 },
   ]
 
   //---------------------
@@ -26,7 +26,7 @@ export const HomePage = () => {
           <p className="textNameAbout flex justify-center">BaanDin'BookStore-Harry Potter Promotion</p>
           <p className="textbuttonL">Select your book:</p>
           {_.map(Books, (item, i) => (
-            <div key={`menu${i}`}>{Books}</div>
+            <div key={`menu${i}`}>{item.tile}</div>
           ))}
         </div>
       </div>
