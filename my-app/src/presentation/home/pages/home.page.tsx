@@ -22,11 +22,22 @@ export const HomePage = () => {
     <div className="relative w-screen h-screen fade-in">
       <img src="/bg_1.jpg" alt="bg" className="w-full h-full object-cover" />
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[1200px] h-[600px] bg-white rounded-[20px] p-[30px]">
-          <p className="textNameAbout flex justify-center">BaanDin'BookStore-Harry Potter Promotion</p>
-          <p className="textbuttonL">Select your book:</p>
+        <div className="w-[1200px] h-fit bg-white rounded-[20px] p-[30px] shadow-lg">
+          <p className="textNameAbout flex justify-center text-2xl font-bold">BaanDin'BookStore - Harry Potter Promotion</p>
+          <p className="textbuttonL mt-5 text-lg">Select your book:</p>
           {_.map(Books, (item, i) => (
-            <div key={`menu${i}`}>{item.tile}</div>
+            <div key={`menu${i}`} className="flex items-center justify-between mt-[5px] p-[12px] rounded-lg">
+              <div className="texttitleAbout text-lg font-medium">
+                {item.id}
+                <span>.</span> {item.title}
+              </div>
+              <input
+                type="number"
+                min="0"
+                className="w-[60px] h-[40px] text-gray-700 border border-gray-300 rounded-[5px] px-2
+              transition-all duration-300  transform hover:scale-105 focus:scale-105 focus:ring-2 focus:ring-blue-400 focus:border-blue-400  outline-none"
+              />
+            </div>
           ))}
         </div>
       </div>
