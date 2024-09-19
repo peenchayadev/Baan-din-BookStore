@@ -1,44 +1,128 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { useState } from 'react'
+import { BookList } from '../components/book-list'
+import Basket from '../components/cart'
+
+interface Book {
+  id: number
+  title: string
+  img: string
+  price: number
+}
+
+interface BasketItem extends Book {
+  quantity: number
+}
 
 export const HomePage = () => {
   //---------------------
   //   CONST
   //---------------------
-  const Books = [
-    { id: 1, title: "Harry Potter and the Philosopher's Stone", price: 100 },
-    { id: 2, title: 'Harry Potter and the Chamber of Secrets', price: 100 },
-    { id: 3, title: 'Harry Potter and the Prisoner of Azkaban', price: 100 },
-    { id: 4, title: 'Harry Potter and the Goblet of Fire', price: 100 },
-    { id: 5, title: 'Harry Potter and the Order of the Phoenix', price: 100 },
-    { id: 6, title: 'Harry Potter and the Half-Blood Prince', price: 100 },
-    { id: 7, title: 'Harry Potter and the Deathly Hallows', price: 100 },
+  const Books: Book[] = [
+    { id: 1, title: "Harry Potter and the Philosopher's Stone Vol.1", price: 100, img: '/1.jpg' },
+    { id: 2, title: 'Harry Potter and the Chamber of Secrets Vol.2', price: 100, img: '/2.jpg' },
+    { id: 3, title: 'Harry Potter and the Prisoner of Azkaban Vol.3', price: 100, img: '/3.jpg' },
+    { id: 4, title: 'Harry Potter and the Goblet of Fire Vol.4', price: 100, img: '/4.jpg' },
+    { id: 5, title: 'Harry Potter and the Order of the Phoenix Vol.5', price: 100, img: '/5.jpg' },
+    { id: 6, title: 'Harry Potter and the Half-Blood Prince Vol.6', price: 100, img: '/6.jpg' },
+    { id: 7, title: 'Harry Potter and the Deathly Hallows Vol.7', price: 100, img: '/7.jpg' },
   ]
+
+  //---------------------
+  //   STATES
+  //---------------------
+  const [cart, setCart] = useState<BasketItem[]>([])
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
+
+  //---------------------
+  //   HANDLE
+  //---------------------
+  const AddToCart = (book: Book) => {
+    setCart((prevCart) => {
+      const existingItem = _.find(prevCart, { id: book.id })
+      if (existingItem) {
+        return _.map(prevCart, (item) => (item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item))
+      } else {
+        return [...prevCart, { ...book, quantity: 1 }]
+      }
+    })
+  }
+
+  const removeFromBasket = (bookId: number) => {
+    setCart((prevCart) => {
+      const updatedBasket = prevCart
+        .map((item) => (item.id === bookId ? { ...item, quantity: item.quantity - 1 } : item))
+        .filter((item) => item.quantity > 0)
+      return updatedBasket
+    })
+  }
+
+  const calculateDiscount = (basket: BasketItem[]): number => {
+    const uniqueBooks = new Set(basket.map((book) => book.id)).size
+    let discountPercentage = 0
+
+    switch (uniqueBooks) {
+      case 2:
+        discountPercentage = 0.1
+        break
+      case 3:
+        discountPercentage = 0.2
+        break
+      case 4:
+        discountPercentage = 0.3
+        break
+      case 5:
+        discountPercentage = 0.4
+        break
+      case 6:
+        discountPercentage = 0.5
+        break
+      case 7:
+        discountPercentage = 0.6
+        break
+      default:
+        discountPercentage = 0
+    }
+
+    const totalPrice = basket.reduce((sum, book) => sum + book.price * book.quantity, 0)
+    return Math.round(totalPrice * discountPercentage)
+  }
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const discount = calculateDiscount(cart)
+  const finalPrice = totalPrice - discount
 
   //---------------------
   //   RENDER
   //---------------------
   return (
-    <div className="relative w-screen h-screen fade-in">
-      <img src="/bg_1.jpg" alt="bg" className="w-full h-full object-cover" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[1200px] h-fit bg-white rounded-[20px] p-[30px] shadow-lg">
-          <p className="textNameAbout flex justify-center text-2xl font-bold">BaanDin'BookStore - Harry Potter Promotion</p>
-          <p className="textbuttonL mt-5 text-lg">Select your book:</p>
-          {_.map(Books, (item, i) => (
-            <div key={`menu${i}`} className="flex items-center justify-between mt-[5px] p-[12px] rounded-lg">
-              <div className="texttitleAbout text-lg font-medium">
-                {item.id}
-                <span>.</span> {item.title}
-              </div>
-              <input
-                type="number"
-                min="0"
-                className="w-[60px] h-[40px] text-gray-700 border border-gray-300 rounded-[5px] px-2
-              transition-all duration-300  transform hover:scale-105 focus:scale-105 focus:ring-2 focus:ring-blue-400 focus:border-blue-400  outline-none"
-              />
-            </div>
-          ))}
+    <div className="relative min-h-screen w-full fade-in">
+      <img src="/bg_1.jpg" alt="bg" className="fixed inset-0 w-full h-full object-cover opacity-60 z-0" />
+      <div className="relative z-10 pt-[20px] px-4 pb-8">
+        <h1 className="text-4xl font-bold mb-[6px] text-center text-gray-800">Baan Nai Din Bookstore</h1>
+        <h2 className="text-2xl font-semibold mb-[16px] text-center text-gray-700">Harry Potter Promotion</h2>
+        <div className="flex justify-center">
+          <div className="rounded-[10px] bg-gray-600 bg-opacity-80 p-[20px] max-w-[1400px] w-full">
+            <BookList data={Books} addToCart={AddToCart} />
+            <Basket
+              isOpen={isCartOpen}
+              setIsOpen={setIsCartOpen}
+              items={cart}
+              removeFromBasket={removeFromBasket}
+              totalPrice={totalPrice}
+              discount={discount}
+              finalPrice={finalPrice}
+            />
+            <button className="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg" onClick={() => setIsCartOpen(true)}>
+              🛒{' '}
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>
