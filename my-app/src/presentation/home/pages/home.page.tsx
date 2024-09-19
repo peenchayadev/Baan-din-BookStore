@@ -2,6 +2,8 @@ import _ from 'lodash'
 import React, { useState } from 'react'
 import { BookList } from '../components/book-list'
 import Basket from '../components/cart'
+import classNames from 'classnames'
+import { Observer } from 'mobx-react-lite'
 
 interface Book {
   id: number
@@ -48,7 +50,7 @@ export const HomePage = () => {
     })
   }
 
-  const removeFromBasket = (bookId: number) => {
+  const removeFromCart = (bookId: number) => {
     setCart((prevCart) => {
       const updatedBasket = prevCart
         .map((item) => (item.id === bookId ? { ...item, quantity: item.quantity - 1 } : item))
@@ -97,34 +99,43 @@ export const HomePage = () => {
   //   RENDER
   //---------------------
   return (
-    <div className="relative min-h-screen w-full fade-in">
-      <img src="/bg_1.jpg" alt="bg" className="fixed inset-0 w-full h-full object-cover opacity-60 z-0" />
-      <div className="relative z-10 pt-[20px] px-4 pb-8">
-        <h1 className="text-4xl font-bold mb-[6px] text-center text-gray-800">Baan Nai Din Bookstore</h1>
-        <h2 className="text-2xl font-semibold mb-[16px] text-center text-gray-700">Harry Potter Promotion</h2>
-        <div className="flex justify-center">
-          <div className="rounded-[10px] bg-gray-600 bg-opacity-80 p-[20px] max-w-[1400px] w-full">
-            <BookList data={Books} addToCart={AddToCart} />
-            <Basket
-              isOpen={isCartOpen}
-              setIsOpen={setIsCartOpen}
-              items={cart}
-              removeFromBasket={removeFromBasket}
-              totalPrice={totalPrice}
-              discount={discount}
-              finalPrice={finalPrice}
-            />
-            <button className="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg" onClick={() => setIsCartOpen(true)}>
-              🛒{' '}
-              {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </button>
+    <Observer>
+      {() => (
+        <div className="relative min-h-screen w-full fade-in">
+          <img src="/bg_1.jpg" alt="bg" className="fixed inset-0 w-full h-full object-cover opacity-60 z-0" />
+          <div className="relative z-10 pt-[20px] px-4 pb-8">
+            <h1 className="text-4xl font-bold mb-[6px] text-center text-gray-800">Baan Nai Din Bookstore</h1>
+            <h2 className="text-2xl font-semibold mb-[16px] text-center text-gray-700">Harry Potter Promotion</h2>
+            <div className="flex justify-center">
+              <div className="rounded-[10px] bg-gray-600 bg-opacity-80 p-[20px] max-w-[1400px] w-full">
+                <BookList data={Books} addToCart={AddToCart} />
+                <Basket
+                  isOpen={isCartOpen}
+                  setIsOpen={setIsCartOpen}
+                  items={cart}
+                  removeFromCart={removeFromCart}
+                  totalPrice={totalPrice}
+                  discount={discount}
+                  finalPrice={finalPrice}
+                />
+                <button
+                  className={classNames(
+                    'fixed bottom-4 right-4 bg-orange-600 hover:bg-orange-900 transition-all duration-200 text-white p-4 rounded-full shadow-lg'
+                  )}
+                  onClick={() => setIsCartOpen(true)}
+                >
+                  <i className="fa-solid fa-cart-shopping mr-[4px] text-[15px] flex justify-center"></i>
+                  {totalItems > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                      {totalItems}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </Observer>
   )
 }

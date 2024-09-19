@@ -17,15 +17,15 @@ export const PrimaryButton = ({ icon, title, disabled, onClick }: PrimaryButtonP
       disabled={disabled as boolean}
       onClick={(e) => onClick(e)}
       className={classNames(
-        'rounded-[6px] h-[34px] py-[8px] px-[12px] flex justify-center items-center labelM text-light-4 transition-all duration-500 gap-x-[8px]',
+        ' w-full rounded-[6px] h-[34px] py-[8px] px-[12px] flex justify-center items-center labelM text-light-4 transition-all duration-500 gap-x-[8px]',
         {
-          'bg-primary cursor-pointer hover:bg-primary-darker': !disabled,
-          'bg-dark-4 cursor-not-allowed': disabled,
+          'bg-orange-800 cursor-pointer hover:hover:bg-orange-950': !disabled,
+          'bg-slate-500 cursor-not-allowed': disabled,
         }
       )}
     >
-      {icon && <i className={classNames(icon)}></i>}
-      {title}
+      {icon && <i className={classNames(icon, 'text-white')}></i>}
+      <div className="text-white">{title}</div>
     </button>
   )
 }

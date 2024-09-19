@@ -5,32 +5,6 @@
 @tailwind utilities;
 
 @layer utilities {
-  .textA {
-    font-family: 'Quicksand';
-  }
-
-  .texttitleAbout {
-    font-family: 'Quicksand';
-    font-weight: 400;
-    font-size: 20px;
-  }
-
-  .textNameAbout {
-    font-family: 'Quicksand';
-    font-weight: 600;
-    font-size: 35px;
-  }
-
-  .textbuttonHome {
-    font-family: 'Quicksand';
-    font-weight: 500;
-  }
-
-  .textbuttonL {
-    font-family: 'Quicksand';
-    font-weight: 700;
-    font-size: 24px;
-  }
   .displayL {
     font-family: 'Sarabun';
     font-weight: 700;

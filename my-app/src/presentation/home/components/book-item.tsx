@@ -24,7 +24,7 @@ export const BookItem = (props: BookItemProps) => {
   //   HANDLE
   //---------------------
   const handleAddToCart = () => {
-    for (let i = 1; i < quantity; i++) {
+    for (let i = 0; i < quantity; i++) {
       props.addToCart(props.data)
     }
     setQuantity(1)
@@ -60,14 +60,16 @@ export const BookItem = (props: BookItemProps) => {
             +
           </button>
         </div>
-        <button
-          className="bg-orange-800 hover:bg-orange-950 transition-all duration-200 text-white px-4 py-2 rounded w-full"
-          onClick={handleAddToCart}
-          disabled={quantity === 0}
-        >
-          Add to Cart
-        </button>
-        <PrimaryButton title="Add to Cart" onClick={handleAddToCart} />
+        <div>
+          <PrimaryButton
+            icon="fa-solid fa-cart-shopping"
+            disabled={quantity === 0}
+            title="ADD TO CART"
+            onClick={() => {
+              handleAddToCart()
+            }}
+          />
+        </div>
       </div>
     </div>
   )
