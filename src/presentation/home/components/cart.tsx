@@ -37,7 +37,7 @@ const Cart = ({ isOpen, setIsOpen, items, removeFromCart, totalPrice, discount, 
   //---------------------
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className={classNames('bg-white p-6 rounded-lg min-w-[600px] mx-[10px]', { 'animate-cart-open': isOpen })}>
+      <div className={classNames('bg-white p-6 rounded-lg max-w-[600px] mx-[10px]', { 'animate-cart-open': isOpen })}>
         {items.length === 0 ? (
           <div className="flex flex-col justify-center items-center">
             <img src="/no-data.png" alt="" className="w-[200px] object-cover" />
@@ -52,8 +52,8 @@ const Cart = ({ isOpen, setIsOpen, items, removeFromCart, totalPrice, discount, 
                   {item.title} (x{item.quantity})
                 </span>
                 <div>
-                  <span className="mr-2">{item.price * item.quantity} baht</span>
-                  <button onClick={() => removeFromCart(item.id)} className="text-red-500">
+                  <span className="ml-4">{item.price * item.quantity} baht</span>
+                  <button onClick={() => removeFromCart(item.id)} className="text-red-500 ml-2">
                     <i className="fa-solid fa-trash text-red-800 hover:text-red-600 transition-all duration-500"></i>
                   </button>
                 </div>

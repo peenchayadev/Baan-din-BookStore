@@ -39,7 +39,7 @@ export const BookItem = (props: BookItemProps) => {
         <div className="w-full h-[192px]  mb-4 flex items-center justify-center rounded-[10px]">
           <img src={props.data.img} alt="" className="w-[50%] h-full object-cover" />
         </div>
-        <h3 className="text-lg font-semibold mb-2">{props.data.title}</h3>
+        <h3 className="text-lg font-semibold mb-2 titleM">{props.data.title}</h3>
         <p className="text-gray-600 mb-4">Price: {props.data.price} Baht</p>
         <div className="flex items-center mb-4">
           <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-[20px] border rounded">
