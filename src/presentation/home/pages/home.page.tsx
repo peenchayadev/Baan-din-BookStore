@@ -21,13 +21,13 @@ export const HomePage = () => {
   //   CONST
   //---------------------
   const Books: Book[] = [
-    { id: 1, title: "Harry Potter and the Philosopher's Stone Vol.1", price: 100, img: '/1.jpg' },
-    { id: 2, title: 'Harry Potter and the Chamber of Secrets Vol.2', price: 100, img: '/2.jpg' },
-    { id: 3, title: 'Harry Potter and the Prisoner of Azkaban Vol.3', price: 100, img: '/3.jpg' },
-    { id: 4, title: 'Harry Potter and the Goblet of Fire Vol.4', price: 100, img: '/4.jpg' },
-    { id: 5, title: 'Harry Potter and the Order of the Phoenix Vol.5', price: 100, img: '/5.jpg' },
-    { id: 6, title: 'Harry Potter and the Half-Blood Prince Vol.6', price: 100, img: '/6.jpg' },
-    { id: 7, title: 'Harry Potter and the Deathly Hallows Vol.7', price: 100, img: '/7.jpg' },
+    { id: 1, title: "Harry Potter and the Philosopher's Stone Vol.1 (1997)", price: 100, img: '/1.jpg' },
+    { id: 2, title: 'Harry Potter and the Chamber of Secrets Vol.2 (1998)', price: 100, img: '/2.jpg' },
+    { id: 3, title: 'Harry Potter and the Prisoner of Azkaban Vol.3 (1999)', price: 100, img: '/3.jpg' },
+    { id: 4, title: 'Harry Potter and the Goblet of Fire Vol.4 (2000)', price: 100, img: '/4.jpg' },
+    { id: 5, title: 'Harry Potter and the Order of the Phoenix Vol.5 (2003)', price: 100, img: '/5.jpg' },
+    { id: 6, title: 'Harry Potter and the Half-Blood Prince Vol.6 (2005)', price: 100, img: '/6.jpg' },
+    { id: 7, title: 'Harry Potter and the Deathly Hallows Vol.7 (2007)', price: 100, img: '/7.jpg' },
   ]
 
   //---------------------
