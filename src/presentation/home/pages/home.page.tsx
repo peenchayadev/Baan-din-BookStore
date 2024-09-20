@@ -52,10 +52,10 @@ export const HomePage = () => {
 
   const removeFromCart = (bookId: number) => {
     setCart((prevCart) => {
-      const updatedCart = prevCart
-        .map((item) => (item.id === bookId ? { ...item, quantity: item.quantity - 1 } : item))
-        .filter((item) => item.quantity > 0)
-      return updatedCart
+      return _.filter(
+        _.map(prevCart, (item) => (item.id === bookId ? { ...item, quantity: item.quantity - 1 } : item)),
+        (item) => item.quantity > 0
+      )
     })
   }
 
