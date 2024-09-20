@@ -15,7 +15,11 @@ interface BookListProps {
 }
 
 export const BookList = (props: BookListProps) => {
+  //---------------------
+  //   CONST
+  //---------------------
   const Books = _.map(props.data, (item) => ({ id: item.id, name: item.title, price: item.price, img: item.img }))
+
   //---------------------
   //   RENDER
   //---------------------

@@ -1,9 +1,9 @@
 import _ from 'lodash'
-import React, { useState } from 'react'
-import { BookList } from '../components/book-list'
-import Basket from '../components/cart'
+import { Toaster } from 'sonner'
 import classNames from 'classnames'
-import { Observer } from 'mobx-react-lite'
+import React, { useState } from 'react'
+import Basket from '../components/cart'
+import { BookList } from '../components/book-list'
 
 interface Book {
   id: number
@@ -12,7 +12,7 @@ interface Book {
   price: number
 }
 
-interface BasketItem extends Book {
+interface CartItem extends Book {
   quantity: number
 }
 
@@ -33,7 +33,7 @@ export const HomePage = () => {
   //---------------------
   //   STATES
   //---------------------
-  const [cart, setCart] = useState<BasketItem[]>([])
+  const [cart, setCart] = useState<CartItem[]>([])
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
 
   //---------------------
@@ -52,18 +52,18 @@ export const HomePage = () => {
 
   const removeFromCart = (bookId: number) => {
     setCart((prevCart) => {
-      const updatedBasket = prevCart
+      const updatedCart = prevCart
         .map((item) => (item.id === bookId ? { ...item, quantity: item.quantity - 1 } : item))
         .filter((item) => item.quantity > 0)
-      return updatedBasket
+      return updatedCart
     })
   }
 
-  const calculateDiscount = (basket: BasketItem[]): number => {
-    const uniqueBooks = new Set(basket.map((book) => book.id)).size
+  const calculateDiscount = (cart: CartItem[]): number => {
+    const uniqueBooksCount = _.uniqBy(cart, 'id').length
     let discountPercentage = 0
 
-    switch (uniqueBooks) {
+    switch (uniqueBooksCount) {
       case 2:
         discountPercentage = 0.1
         break
@@ -86,56 +86,58 @@ export const HomePage = () => {
         discountPercentage = 0
     }
 
-    const totalPrice = basket.reduce((sum, book) => sum + book.price * book.quantity, 0)
+    const totalPrice = Math.round(_.sumBy(cart, (book) => book.price * book.quantity) * discountPercentage)
     return Math.round(totalPrice * discountPercentage)
   }
 
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const totalItems = _.sumBy(cart, 'quantity')
+  const totalPrice = _.sumBy(cart, (item) => item.price * item.quantity)
   const discount = calculateDiscount(cart)
   const finalPrice = totalPrice - discount
+
+  const clearCart = () => {
+    setCart([])
+  }
 
   //---------------------
   //   RENDER
   //---------------------
   return (
-    <Observer>
-      {() => (
-        <div className="relative min-h-screen w-full fade-in">
-          <img src="/bg_1.jpg" alt="bg" className="fixed inset-0 w-full h-full object-cover opacity-60 z-0" />
-          <div className="relative z-10 pt-[20px] px-4 pb-8">
-            <h1 className="text-4xl font-bold mb-[6px] text-center text-gray-800">Baan Nai Din Bookstore</h1>
-            <h2 className="text-2xl font-semibold mb-[16px] text-center text-gray-700">Harry Potter Promotion</h2>
-            <div className="flex justify-center">
-              <div className="rounded-[10px] bg-gray-600 bg-opacity-80 p-[20px] max-w-[1400px] w-full">
-                <BookList data={Books} addToCart={AddToCart} />
-                <Basket
-                  isOpen={isCartOpen}
-                  setIsOpen={setIsCartOpen}
-                  items={cart}
-                  removeFromCart={removeFromCart}
-                  totalPrice={totalPrice}
-                  discount={discount}
-                  finalPrice={finalPrice}
-                />
-                <button
-                  className={classNames(
-                    'fixed bottom-4 right-4 bg-orange-600 hover:bg-orange-900 transition-all duration-200 text-white p-4 rounded-full shadow-lg'
-                  )}
-                  onClick={() => setIsCartOpen(true)}
-                >
-                  <i className="fa-solid fa-cart-shopping mr-[4px] text-[15px] flex justify-center"></i>
-                  {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                      {totalItems}
-                    </span>
-                  )}
-                </button>
-              </div>
-            </div>
+    <div className="relative min-h-screen w-full fade-in">
+      <Toaster />
+      <img src="/bg_1.jpg" alt="bg" className="fixed inset-0 w-full h-full object-cover opacity-60 z-0" />
+      <div className="relative z-10 pt-[20px] px-4 pb-8">
+        <h1 className="text-4xl font-bold mb-[6px] text-center text-gray-800">Baan Nai Din Bookstore</h1>
+        <h2 className="text-2xl font-semibold mb-[16px] text-center text-gray-700">Harry Potter Promotion</h2>
+        <div className="flex justify-center">
+          <div className="rounded-[10px] bg-gray-600 bg-opacity-80 p-[20px] max-w-[1400px] w-full">
+            <BookList data={Books} addToCart={AddToCart} />
+            <Basket
+              isOpen={isCartOpen}
+              setIsOpen={setIsCartOpen}
+              items={cart}
+              removeFromCart={removeFromCart}
+              totalPrice={totalPrice}
+              discount={discount}
+              finalPrice={finalPrice}
+              clearCart={clearCart}
+            />
+            <button
+              className={classNames(
+                'fixed bottom-4 right-4 bg-orange-600 hover:bg-orange-900 transition-all duration-200 text-white p-4 rounded-full shadow-lg'
+              )}
+              onClick={() => setIsCartOpen(true)}
+            >
+              <i className="fa-solid fa-cart-shopping mr-[4px] text-[15px] flex justify-center"></i>
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
         </div>
-      )}
-    </Observer>
+      </div>
+    </div>
   )
 }

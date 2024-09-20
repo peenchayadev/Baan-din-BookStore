@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import _ from 'lodash'
 import classNames from 'classnames'
-import { toastContext } from './contexts/toast.context'
+import { toast } from 'sonner'
 
 interface CartItem {
   id: number
@@ -18,18 +18,23 @@ interface CartProps {
   totalPrice: number
   discount: number
   finalPrice: number
+  clearCart: Function
 }
 
-const Cart = ({ isOpen, setIsOpen, items, removeFromCart, totalPrice, discount, finalPrice }: CartProps) => {
+const Cart = ({ isOpen, setIsOpen, items, removeFromCart, totalPrice, discount, finalPrice, clearCart }: CartProps) => {
   if (!isOpen) return null
-
-  const toast = useContext(toastContext)
-
-  const onBuyIt = () => {
+  //---------------------
+  //   HANDLE
+  //---------------------
+  const handlePurchase = () => {
+    toast.success('Purchase successful! Thank you for your order.')
+    clearCart()
     setIsOpen(false)
-    toast.onOpen({ title: 'Buy Success !', type: 'success', icon: 'solid fa-check ' })
   }
 
+  //---------------------
+  //   RENDER
+  //---------------------
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className={classNames('bg-white p-6 rounded-lg min-w-[600px] mx-[10px]', { 'animate-cart-open': isOpen })}>
@@ -71,7 +76,7 @@ const Cart = ({ isOpen, setIsOpen, items, removeFromCart, totalPrice, discount, 
           {items.length === 0 || (
             <button
               onClick={() => {
-                onBuyIt()
+                handlePurchase()
               }}
               className="mt-4 bg-orange-800 hover:bg-orange-950 transition-all duration-200 text-white px-4 py-2 rounded w-full"
             >
