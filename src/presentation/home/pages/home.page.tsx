@@ -86,8 +86,8 @@ export const HomePage = () => {
         discountPercentage = 0
     }
 
-    const totalPrice = Math.round(_.sumBy(cart, (book) => book.price * book.quantity) * discountPercentage)
-    return Math.round(totalPrice * discountPercentage)
+    const totalPrice = _.reduce(cart, (sum, book) => sum + book.price * book.quantity, 0)
+    return totalPrice * discountPercentage
   }
 
   const totalItems = _.sumBy(cart, 'quantity')
