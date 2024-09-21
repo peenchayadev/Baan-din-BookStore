@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _, { uniqueId } from 'lodash'
 import { Toaster } from 'sonner'
 import classNames from 'classnames'
 import React, { useState } from 'react'
@@ -37,7 +37,7 @@ export const HomePage = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
 
   //---------------------
-  //   HANDLE
+  //
   //---------------------
   const AddToCart = (book: Book) => {
     setCart((prevCart) => {
@@ -61,39 +61,22 @@ export const HomePage = () => {
 
   const calculateDiscount = (cart: CartItem[]): number => {
     const uniqueBooksCount = _.uniqBy(cart, 'id').length
-    let discountPercentage = 0
-
-    switch (uniqueBooksCount) {
-      case 2:
-        discountPercentage = 0.1
-        break
-      case 3:
-        discountPercentage = 0.2
-        break
-      case 4:
-        discountPercentage = 0.3
-        break
-      case 5:
-        discountPercentage = 0.4
-        break
-      case 6:
-        discountPercentage = 0.5
-        break
-      case 7:
-        discountPercentage = 0.6
-        break
-      default:
-        discountPercentage = 0
-    }
-
-    const totalPrice = _.reduce(cart, (sum, book) => sum + book.price * book.quantity, 0)
-    return totalPrice * discountPercentage
+    const discounts: number[] = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+    const discountPercentage = discounts[uniqueBooksCount]
+    return discountPercentage
   }
 
   const totalItems = _.sumBy(cart, 'quantity')
   const totalPrice = _.sumBy(cart, (item) => item.price * item.quantity)
+
+  const duplicateBooksPrice = _.sumBy(
+    _.filter(cart, (item) => item.quantity > 1),
+    (item) => item.price * item.quantity
+  )
+
   const discount = calculateDiscount(cart)
-  const finalPrice = totalPrice - discount
+  const discountAmount = duplicateBooksPrice * discount
+  const finalPrice = totalPrice - discountAmount
 
   const clearCart = () => {
     setCart([])
@@ -118,7 +101,7 @@ export const HomePage = () => {
               items={cart}
               removeFromCart={removeFromCart}
               totalPrice={totalPrice}
-              discount={discount}
+              discount={discountAmount}
               finalPrice={finalPrice}
               clearCart={clearCart}
             />
