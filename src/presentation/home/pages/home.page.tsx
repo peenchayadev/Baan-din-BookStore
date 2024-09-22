@@ -82,6 +82,7 @@ export const HomePage = () => {
     let totalPrice = 0
     let totalDiscount = 0
     let remainingBooks = _.cloneDeep(cart)
+
     const getBookPrice = (bookId: number, quantity: number) => {
       const bookData = _.find(books, { id: bookId })
       return bookData ? bookData.price * quantity : 0
