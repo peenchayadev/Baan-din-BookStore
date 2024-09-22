@@ -1,4 +1,4 @@
-import _, { uniqueId } from 'lodash'
+import _ from 'lodash'
 import { Toaster } from 'sonner'
 import classNames from 'classnames'
 import React, { useState } from 'react'
@@ -59,24 +59,80 @@ export const HomePage = () => {
     })
   }
 
-  const calculateDiscount = (cart: CartItem[]): number => {
-    const uniqueBooksCount = _.uniqBy(cart, 'id').length
-    const discounts: number[] = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
-    const discountPercentage = discounts[uniqueBooksCount]
-    return discountPercentage
+  // const calculateDiscount = (cart: CartItem[]): number => {
+  //   const uniqueBooksCount = _.uniqBy(cart, 'id').length
+  //   const discounts: number[] = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+  //   const discountPercentage = discounts[uniqueBooksCount]
+
+  //   return discountPercentage
+  // }
+
+  // const duplicateBooksPrice = _.sumBy(
+  //   _.filter(cart, (item) => item.quantity > 1),
+  //   (item) => item.price * item.quantity
+  // )
+  // const totalItems = _.sumBy(cart, 'quantity')
+  // const totalPrice = _.sumBy(cart, (item) => item.price * item.quantity)
+
+  // const discount = calculateDiscount(cart)
+  // const discountAmount = duplicateBooksPrice * discount
+  // const finalPrice = totalPrice - discountAmount
+
+  const calculatePrice = (cart: CartItem[], books: Book[]) => {
+    let totalPrice = 0
+    let totalDiscount = 0
+    let remainingBooks = _.cloneDeep(cart)
+    const getBookPrice = (bookId: number, quantity: number) => {
+      const bookData = _.find(books, { id: bookId })
+      return bookData ? bookData.price * quantity : 0
+    }
+
+    // ฟังก์ชันย่อยสำหรับคำนวณส่วนลดจากจำนวนเล่มที่ไม่ซ้ำกัน
+    const calculateDiscount = (uniqueCount: number, setPrice: number) => {
+      const discountPercentage = (uniqueCount - 1) * 0.1 // ส่วนลด 10% ต่อเล่มที่ไม่ซ้ำ
+      return Math.floor(setPrice * discountPercentage)
+    }
+
+    // วนลูปคำนวณราคาจาก remainingBooks จนกว่า quantity ของทุกเล่มจะเป็น 0
+    while (_.sumBy(remainingBooks, 'quantity') > 0) {
+      const uniqueBooks = _.filter(remainingBooks, (item) => item.quantity > 0)
+      const uniqueCount = uniqueBooks.length
+
+      if (uniqueCount > 1) {
+        // คำนวณราคารวมของหนังสือที่ไม่ซ้ำกัน
+        const setPrice = _.sumBy(uniqueBooks, (book) => getBookPrice(book.id, 1))
+        totalPrice += setPrice
+
+        // คำนวณส่วนลดและเพิ่มใน totalDiscount
+        const setDiscount = calculateDiscount(uniqueCount, setPrice)
+        totalDiscount += setDiscount
+
+        // ลดจำนวนหนังสือลงทีละ 1 ใน remainingBooks
+        remainingBooks = _.map(remainingBooks, (book) => ({
+          ...book,
+          quantity: Math.max(0, book.quantity - 1),
+        }))
+      } else {
+        // คำนวณราคาในกรณีเหลือหนังสือเล่มเดียวหรือซ้ำ
+        const remainingPrice = _.sumBy(remainingBooks, (book) => getBookPrice(book.id, book.quantity))
+        totalPrice += remainingPrice
+        break
+      }
+    }
+
+    // คำนวณราคาสุทธิหลังหักส่วนลด
+    const finalPrice = Math.floor(totalPrice - totalDiscount)
+    const totalItems = _.sumBy(cart, 'quantity')
+
+    return {
+      totalItems,
+      totalPrice,
+      discountAmount: totalDiscount,
+      finalPrice,
+    }
   }
 
-  const totalItems = _.sumBy(cart, 'quantity')
-  const totalPrice = _.sumBy(cart, (item) => item.price * item.quantity)
-
-  const duplicateBooksPrice = _.sumBy(
-    _.filter(cart, (item) => item.quantity > 1),
-    (item) => item.price * item.quantity
-  )
-
-  const discount = calculateDiscount(cart)
-  const discountAmount = duplicateBooksPrice * discount
-  const finalPrice = totalPrice - discountAmount
+  const { totalItems, totalPrice, discountAmount, finalPrice } = calculatePrice(cart, Books)
 
   const clearCart = () => {
     setCart([])
