@@ -95,24 +95,35 @@ export const HomePage = () => {
     }
 
     // วนลูปคำนวณราคาจาก remainingBooks จนกว่า quantity ของทุกเล่มจะเป็น 0
+    // ex.1
+    // ภาค 1 3 เล่ม
+    // ภาค 2 3 เล่ม
     while (_.sumBy(remainingBooks, 'quantity') > 0) {
       const uniqueBooks = _.filter(remainingBooks, (item) => item.quantity > 0)
+      console.log(uniqueBooks) // = obj ที่เหลือในตะกร้า 3 ตัว
       const uniqueCount = uniqueBooks.length
+      console.log(uniqueCount) // จำนวนที่เหลือเหลือในตะกร้า = 3
 
       if (uniqueCount > 1) {
         // คำนวณราคารวมของหนังสือที่ไม่ซ้ำกัน
         const setPrice = _.sumBy(uniqueBooks, (book) => getBookPrice(book.id, 1))
-        totalPrice += setPrice
+        //มีแค่ id ของแต่ละเล่ม อย่างละ 1 เล่ม * 100 = 200
+        console.log(setPrice)
+        totalPrice += setPrice //รอบที่ 1 ได้ 200
+        console.log(totalPrice)
 
         // คำนวณส่วนลดและเพิ่มใน totalDiscount
-        const setDiscount = calculateDiscount(uniqueCount, setPrice)
-        totalDiscount += setDiscount
+        const setDiscount = calculateDiscount(uniqueCount, setPrice) //10%
+        console.log(setDiscount)
+        totalDiscount += setDiscount //รอบแรก 20 บาท
+        console.log(totalDiscount)
 
         // ลดจำนวนหนังสือลงทีละ 1 ใน remainingBooks
         remainingBooks = _.map(remainingBooks, (book) => ({
           ...book,
           quantity: Math.max(0, book.quantity - 1),
         }))
+        console.log(remainingBooks)
       } else {
         // คำนวณราคาในกรณีเหลือหนังสือเล่มเดียวหรือซ้ำ
         const remainingPrice = _.sumBy(remainingBooks, (book) => getBookPrice(book.id, book.quantity))
