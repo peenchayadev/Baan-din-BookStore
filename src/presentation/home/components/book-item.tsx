@@ -1,13 +1,7 @@
 import _ from 'lodash'
 import React, { useState } from 'react'
 import { PrimaryButton } from './primary-button'
-
-interface Book {
-  id: number
-  img: string
-  title: string
-  price: number
-}
+import { Book } from '@/domain/book.domain'
 
 interface BookItemProps {
   data: Book

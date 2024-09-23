@@ -2,12 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import { BookItem } from './book-item'
 
-interface Book {
-  id: number
-  img: string
-  title: string
-  price: number
-}
+import { Book } from '@/domain/book.domain'
 
 interface BookListProps {
   data: Book[]

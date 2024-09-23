@@ -1,19 +1,14 @@
-import React, { useContext } from 'react'
 import _ from 'lodash'
-import classNames from 'classnames'
+import React from 'react'
 import { toast } from 'sonner'
+import classNames from 'classnames'
 
-interface CartItem {
-  id: number
-  title: string
-  price: number
-  quantity: number
-}
+import { CartItem } from '@/domain/book.domain'
 
 interface CartProps {
+  items: CartItem[]
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  items: CartItem[]
   removeFromCart: (bookId: number) => void
   totalPrice: number
   discount: number
@@ -23,6 +18,7 @@ interface CartProps {
 
 const Cart = ({ isOpen, setIsOpen, items, removeFromCart, totalPrice, discount, finalPrice, clearCart }: CartProps) => {
   if (!isOpen) return null
+
   //---------------------
   //   HANDLE
   //---------------------

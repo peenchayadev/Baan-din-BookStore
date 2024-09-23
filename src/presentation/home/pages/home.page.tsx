@@ -4,17 +4,7 @@ import classNames from 'classnames'
 import React, { useState } from 'react'
 import Basket from '../components/cart'
 import { BookList } from '../components/book-list'
-
-interface Book {
-  id: number
-  title: string
-  img: string
-  price: number
-}
-
-interface CartItem extends Book {
-  quantity: number
-}
+import { Book, CartItem } from '@/domain/book.domain'
 
 export const HomePage = () => {
   //---------------------
@@ -59,12 +49,12 @@ export const HomePage = () => {
     })
   }
 
-  // const calculateDiscount = (cart: CartItem[]): number => {
+  // const calculateDiscount = (cart: CartItem[], setPrice: number) => {
   //   const uniqueBooksCount = _.uniqBy(cart, 'id').length
   //   const discounts: number[] = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
   //   const discountPercentage = discounts[uniqueBooksCount]
 
-  //   return discountPercentage
+  //   return Math.floor(setPrice * discountPercentage)
   // }
 
   // const duplicateBooksPrice = _.sumBy(
@@ -88,51 +78,36 @@ export const HomePage = () => {
       return bookData ? bookData.price * quantity : 0
     }
 
-    // ฟังก์ชันย่อยสำหรับคำนวณส่วนลดจากจำนวนเล่มที่ไม่ซ้ำกัน
-    const calculateDiscount = (uniqueCount: number, setPrice: number) => {
-      const discountPercentage = (uniqueCount - 1) * 0.1 // ส่วนลด 10% ต่อเล่มที่ไม่ซ้ำ
+    const calculateDiscount = (cart: CartItem[], setPrice: number) => {
+      const uniqueBooksCount = _.uniqBy(cart, 'id').length
+      const discounts: number[] = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+      const discountPercentage = discounts[uniqueBooksCount]
+
       return Math.floor(setPrice * discountPercentage)
     }
 
-    // วนลูปคำนวณราคาจาก remainingBooks จนกว่า quantity ของทุกเล่มจะเป็น 0
-    // ex.1
-    // ภาค 1 3 เล่ม
-    // ภาค 2 3 เล่ม
     while (_.sumBy(remainingBooks, 'quantity') > 0) {
       const uniqueBooks = _.filter(remainingBooks, (item) => item.quantity > 0)
-      console.log(uniqueBooks) // = obj ที่เหลือในตะกร้า 3 ตัว
       const uniqueCount = uniqueBooks.length
-      console.log(uniqueCount) // จำนวนที่เหลือเหลือในตะกร้า = 3
 
       if (uniqueCount > 1) {
-        // คำนวณราคารวมของหนังสือที่ไม่ซ้ำกัน
         const setPrice = _.sumBy(uniqueBooks, (book) => getBookPrice(book.id, 1))
-        //มีแค่ id ของแต่ละเล่ม อย่างละ 1 เล่ม * 100 = 200
-        console.log(setPrice)
-        totalPrice += setPrice //รอบที่ 1 ได้ 200
-        console.log(totalPrice)
 
-        // คำนวณส่วนลดและเพิ่มใน totalDiscount
-        const setDiscount = calculateDiscount(uniqueCount, setPrice) //10%
-        console.log(setDiscount)
-        totalDiscount += setDiscount //รอบแรก 20 บาท
-        console.log(totalDiscount)
+        totalPrice += setPrice
 
-        // ลดจำนวนหนังสือลงทีละ 1 ใน remainingBooks
+        const setDiscount = calculateDiscount(cart, setPrice)
+        totalDiscount += setDiscount
+
         remainingBooks = _.map(remainingBooks, (book) => ({
           ...book,
           quantity: Math.max(0, book.quantity - 1),
         }))
-        console.log(remainingBooks)
       } else {
-        // คำนวณราคาในกรณีเหลือหนังสือเล่มเดียวหรือซ้ำ
         const remainingPrice = _.sumBy(remainingBooks, (book) => getBookPrice(book.id, book.quantity))
         totalPrice += remainingPrice
         break
       }
     }
-
-    // คำนวณราคาสุทธิหลังหักส่วนลด
     const finalPrice = Math.floor(totalPrice - totalDiscount)
     const totalItems = _.sumBy(cart, 'quantity')
 
